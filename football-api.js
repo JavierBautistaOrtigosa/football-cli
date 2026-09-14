@@ -6,9 +6,7 @@ async function getStandings() {
       })
       let data = await response.json()
 
-      data.standings[0].table.forEach((team) => {
-            console.log(`${team.position}. ${team.team.name} - ${team.points} pts`)
-      })
+      return data.standings[0].table
 
 }
 

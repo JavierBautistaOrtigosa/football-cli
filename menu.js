@@ -8,6 +8,7 @@ const rl = readline.createInterface({
 })
 
 
+
 function showMenu() {
       console.log('1 - Show standings')
       console.log('2 - Show matches')
@@ -17,11 +18,15 @@ function showMenu() {
 
 function selectOptionMenu() {
       rl.question('Select option: ',
-            (userChoice) => {
+            async (userChoice) => {
                   let option = Number(userChoice)
                   if (option === 1) {
-                        console.clear()
-                        getStandings()
+
+                        const standings = await getStandings()
+
+                        standings.forEach((team) => {
+                              console.log(`${team.position}. ${team.team.name} - ${team.points} pts`)
+                        })
                   }
             }
       )
