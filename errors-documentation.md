@@ -803,3 +803,111 @@ Visualizar
 
 Sin mutar el array original
 ```
+
+## filter() con múltiples valores
+
+Al filtrar varios valores concretos, existen varias opciones.
+
+### Opción 1: OR (||)
+
+Útil cuando hay pocos valores.
+
+```js
+competitions.filter(
+  (
+    competition,
+  ) =>
+    competition.code ===
+      "PD" ||
+    competition.code ===
+      "PL" ||
+    competition.code ===
+      "CL",
+);
+```
+
+Se lee:
+
+"Quiero las competiciones cuyo código sea PD, PL o CL."
+
+### Opción 2: Array + includes() ✅ Recomendado
+
+Más escalable y fácil de mantener.
+
+```js
+const availableCodes =
+  [
+    "PD",
+    "PL",
+    "CL",
+  ];
+
+const competitionsAvailable =
+  competitions.filter(
+    (
+      competition,
+    ) =>
+      availableCodes.includes(
+        competition.code,
+      ),
+  );
+```
+
+Se lee:
+
+"Quiero las competiciones cuyo código esté dentro de la lista de códigos permitidos."
+
+Ventajas:
+
+- Más limpio.
+- Más legible.
+- Fácil añadir nuevos valores.
+
+```js
+const availableCodes =
+  [
+    "PD",
+    "PL",
+    "CL",
+    "BL1",
+    "SA",
+  ];
+```
+
+No es necesario modificar el filter().
+
+### Cuándo usar &&
+
+Se utiliza cuando todas las condiciones deben cumplirse.
+
+```js
+competition.type ===
+  "LEAGUE" &&
+  competition
+    .area
+    .name ===
+    "England";
+```
+
+Se lee:
+
+"Quiero competiciones que sean ligas y además sean de Inglaterra."
+
+### Regla mental
+
+- Varias opciones posibles → `||` o `includes()`
+- Varias condiciones obligatorias → `&&`
+- Lista configurable de valores → `includes()`
+
+Patrón muy común en JavaScript:
+
+```js
+array.filter(
+  (
+    item,
+  ) =>
+    allowedValues.includes(
+      item.prop,
+    ),
+);
+```
