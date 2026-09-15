@@ -1,5 +1,11 @@
+// Responsabilidad:
+// Interaccion con el usuario -> mostrar datos, pedir opciones, gestionar flujos.
+
+
+// #region - dependencies
+
 const readline = require('readline')
-const { getStandings } = require('./football-api')
+const { getLeagues } = require('./football-api')
 
 
 const rl = readline.createInterface({
@@ -7,29 +13,30 @@ const rl = readline.createInterface({
       output: process.stdout
 })
 
-
+// #endregion
 
 function showMenu() {
-      console.log('1 - Show standings')
-      console.log('2 - Show matches')
-      console.log('3 - Search team')
+      console.log('1 - Leagues')
+      console.log('2 - Teams')
+      console.log('3 - Upcoming matches')
       console.log('4 - Exit')
 }
+
+
 
 function selectOptionMenu() {
       rl.question('Select option: ',
             async (userChoice) => {
                   let option = Number(userChoice)
                   if (option === 1) {
-
-                        const standings = await getStandings()
-
-                        standings.forEach((team) => {
-                              console.log(`${team.position}. ${team.team.name} - ${team.points} pts`)
-                        })
+                        getLeagues()
                   }
             }
       )
 }
+
+
+// data.competitions.forEach(competition => console.log(`${competition.id}: ${competition.name} - ${competition.code} - ${competition.type}`))
+
 
 module.exports = { showMenu, selectOptionMenu }
