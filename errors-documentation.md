@@ -571,3 +571,235 @@ catch(error) {
 
 }
 ```
+
+# Nota Rápida - Promise { <pending> }
+
+Si veo:
+
+```text
+Promise { <pending> }
+```
+
+preguntarme:
+
+```text
+¿Estoy olvidando un await?
+```
+
+Ejemplo:
+
+❌
+
+```js
+const competitions =
+  getLeagues();
+```
+
+Resultado:
+
+```text
+Promise { <pending> }
+```
+
+✅
+
+```js
+const competitions =
+  await getLeagues();
+```
+
+Porque:
+
+```text
+Toda función async
+↓
+Devuelve una Promise
+```
+
+# Nota - map(), console.table() y Mutación
+
+## map()
+
+```js
+const newArray =
+      oldArray.map(...)
+```
+
+`map()`:
+
+```text
+Array original
+↓
+Transformación
+↓
+Nuevo array
+```
+
+No modifica el array original.
+
+---
+
+## Ejemplo
+
+```js
+const names =
+  teams.map(
+    (
+      team,
+    ) =>
+      team.name,
+  );
+```
+
+Resultado:
+
+```js
+names;
+```
+
+↓
+
+```js
+[
+  "Arsenal",
+  "Chelsea",
+  "Liverpool",
+];
+```
+
+---
+
+## Mi caso
+
+```js
+competitions.map(
+  (
+    competition,
+  ) => ({
+    code: competition.code,
+    country:
+      competition
+        .area
+        .name,
+    name: competition.name,
+    type: competition.type,
+    id: competition.id,
+  }),
+);
+```
+
+Produce:
+
+```js
+[
+      {
+            code: 'PL',
+            country: 'England',
+            name: 'Premier League',
+            type: 'LEAGUE',
+            id: 2021
+      },
+      ...
+]
+```
+
+---
+
+## ¿Dónde se guarda?
+
+Aquí:
+
+```js
+const leagues =
+      competitions.map(...)
+```
+
+↓
+
+El nuevo array se llama:
+
+```js
+leagues;
+```
+
+---
+
+Aquí:
+
+```js
+console.table(
+      competitions.map(...)
+)
+```
+
+↓
+
+No se guarda.
+
+Se crea temporalmente.
+
+```text
+competitions
+↓
+map()
+↓
+nuevo array temporal
+↓
+console.table()
+↓
+desaparece
+```
+
+---
+
+## console.table()
+
+```js
+console.table(
+  array,
+);
+```
+
+Muestra un array de objetos como una tabla.
+
+No necesita:
+
+```js
+console.log();
+```
+
+porque ya imprime directamente en consola.
+
+---
+
+## Diferencia rápida
+
+```text
+forEach()
+↓
+Recorrer elementos
+
+map()
+↓
+Crear nuevo array
+
+console.table()
+↓
+Mostrar datos
+```
+
+---
+
+## Regla Mental
+
+```text
+map()
+↓
+Transformar
+
+console.table()
+↓
+Visualizar
+
+Sin mutar el array original
+```
