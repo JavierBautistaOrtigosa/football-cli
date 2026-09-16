@@ -46,8 +46,7 @@ async function getTeams(competitionCode) {
             // 1. Fetch
 
             const response = await fetch(`https://api.football-data.org/v4/competitions/${competitionCode}/teams`,
-                  { headers: { 'X-Auth-Token': process.env.FOOTBALL_API_TOKEN } }
-            )
+                  { headers: { 'X-Auth-Token': process.env.FOOTBALL_API_TOKEN } })
 
             // 2. Comprobar response.ok
 
@@ -67,10 +66,26 @@ async function getTeams(competitionCode) {
       } catch (error) {
             throw error
       }
-
-
-
 }
 
-module.exports = { getLeagues, getTeams }
+async function getMatches(competitionCode) {
+
+      try {
+            const response = await fetch(`https://api.football-data.org/v4/competitions/${competitionCode}/matches`,
+                  { headers: { 'X-Auth-Token': process.env.FOOTBALL_API_TOKEN } })
+
+            if (!response.ok) {
+                  throw new Error(`HTTP Error: ${response.status}`)
+            }
+
+            const data = await response.json()
+
+            return data.matches
+
+      } catch (error) {
+            throw error
+      }
+}
+
+module.exports = { getLeagues, getTeams, getMatches }
 

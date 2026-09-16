@@ -911,3 +911,308 @@ array.filter(
     ),
 );
 ```
+
+# Nota Mental - Object.keys(), objetos, strings y exploración de JSON
+
+## Problema
+
+Mientras exploraba la respuesta de la API de partidos hice esto:
+
+```js
+console.log(
+  Object.keys(
+    data
+      .matches[0]
+      .area,
+  ),
+);
+```
+
+Y obtuve:
+
+```js
+[
+  "id",
+  "name",
+  "code",
+  "flag",
+];
+```
+
+Todo correcto.
+
+Pero después hice:
+
+```js
+console.log(
+  Object.keys(
+    data
+      .matches[0]
+      .area
+      .name,
+  ),
+);
+```
+
+Y obtuve:
+
+```js
+[
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+];
+```
+
+Lo cual me confundió bastante.
+
+---
+
+## Qué pasó
+
+`area` es un objeto:
+
+```js
+{
+  id: 2072,
+  name: 'England',
+  code: 'ENG',
+  flag: 'https://...'
+}
+```
+
+Por eso:
+
+```js
+Object.keys(
+  data
+    .matches[0]
+    .area,
+);
+```
+
+devuelve las propiedades del objeto:
+
+```js
+[
+  "id",
+  "name",
+  "code",
+  "flag",
+];
+```
+
+---
+
+## El detalle importante
+
+Sin embargo:
+
+```js
+data
+  .matches[0]
+  .area
+  .name;
+```
+
+ya no es un objeto.
+
+Es un string:
+
+```js
+"England";
+```
+
+Al hacer:
+
+```js
+Object.keys(
+  "England",
+);
+```
+
+JavaScript trata el string como una secuencia de caracteres:
+
+```txt
+E n g l a n d
+0 1 2 3 4 5 6
+```
+
+Por eso devuelve:
+
+```js
+[
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+];
+```
+
+---
+
+## Otro ejemplo
+
+```js
+Object.keys(
+  "ENG",
+);
+```
+
+Resultado:
+
+```js
+[
+  "0",
+  "1",
+  "2",
+];
+```
+
+Porque:
+
+```txt
+E N G
+0 1 2
+```
+
+---
+
+## Regla de Oro
+
+```text
+Object.keys(objeto)
+↓
+Propiedades del objeto
+
+Object.keys(string)
+↓
+Índices de los caracteres
+```
+
+---
+
+## Cómo inspeccionar una API
+
+Para descubrir la estructura principal:
+
+```js
+console.log(
+  Object.keys(
+    data
+      .matches[0],
+  ),
+);
+```
+
+Para descubrir la estructura de un objeto anidado:
+
+```js
+console.log(
+  Object.keys(
+    data
+      .matches[0]
+      .homeTeam,
+  ),
+);
+```
+
+Para ver los valores reales:
+
+```js
+console.log(
+  data
+    .matches[0]
+    .homeTeam,
+);
+```
+
+---
+
+## Si ya conozco la propiedad
+
+No necesito usar:
+
+```js
+Object.keys(...)
+```
+
+Puedo acceder directamente:
+
+```js
+console.log(
+  data
+    .matches[0]
+    .area
+    .name,
+);
+```
+
+o
+
+```js
+console.log(
+  data
+    .matches[0]
+    .homeTeam
+    .name,
+);
+```
+
+---
+
+## Truco útil
+
+Normalmente basta con inspeccionar un único elemento:
+
+```js
+console.log(
+  data
+    .matches[0],
+);
+```
+
+porque todos los elementos del array suelen tener la misma estructura.
+
+No necesito hacer:
+
+```js
+data.matches.forEach(...)
+```
+
+para descubrir las propiedades.
+
+---
+
+## Aprendizaje importante
+
+Al integrar una API nueva es normal dedicar más tiempo a entender el JSON que a escribir el código final.
+
+Proceso habitual:
+
+```text
+Encontrar endpoint
+↓
+Hacer fetch()
+↓
+Inspeccionar JSON
+↓
+Object.keys()
+↓
+Localizar propiedades útiles
+↓
+map()
+↓
+console.table()
+```
+
+Programar no es solo escribir código.
+
+Programar es entender los datos.

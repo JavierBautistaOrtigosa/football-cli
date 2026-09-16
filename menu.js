@@ -5,7 +5,7 @@
 // #region - dependencies
 
 const readline = require('readline')
-const { getLeagues, getTeams } = require('./football-api')
+const { getLeagues, getTeams, getMatches } = require('./football-api')
 
 
 const rl = readline.createInterface({
@@ -47,6 +47,19 @@ function selectOptionMenu() {
                                           await showTeams('CL')
                                     }
                               })
+                  } else if (option === 3) {
+                        showLeagues()
+                        rl.question('Choose league: ',
+                              async (userChoice) => {
+                                    let option = Number(userChoice)
+                                    if (option === 1) {
+                                          await showMatches('PD')
+                                    } else if (option === 2) {
+                                          await showMatches('PL')
+                                    } else if (option === 3) {
+                                          await showMatches('CL')
+                                    }
+                              })
                   }
             }
       )
@@ -84,4 +97,21 @@ async function showCompetitions() {
       )
 }
 
+async function showMatches(competitionCode) {
+      const matches = await getMatches(competitionCode)
+      console.table(
+            matches.map((match) => ({
+                  time: match.utcDate,
+                  homeTeam: match.homeTeam.name,
+                  awayTeam: match.awayTeam.name,
+                  status: match.status,
+                  winner: match.score.winner,
+                  homeTeamScore: match.score.fullTime.home,
+                  awayTeamScore: match.score.fullTime.away
+            }))
+      )
+}
+
 module.exports = { showMenu, selectOptionMenu }
+
+
