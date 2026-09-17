@@ -1,10 +1,6 @@
 // Responsabilidad:
 // Hablar con la API -> fetch, procesar respuesta, return
 
-// #region - dependencies
-
-require('dotenv').config()
-
 // #endregion
 
 async function getLeagues() {

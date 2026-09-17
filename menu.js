@@ -60,12 +60,19 @@ function selectOptionMenu() {
                                           await showMatches('CL')
                                     }
                               })
+                  } else if (option === 4) {
+                        console.log('Goodbye :)')
+                        rl.close()
                   }
+
             }
       )
 }
 
 async function showTeams(competitionCode) {
+      console.log('1')
+      console.clear()
+      console.log('2')
       const teams = await getTeams(competitionCode)
       console.table(
             teams.map(team => ({
@@ -73,9 +80,13 @@ async function showTeams(competitionCode) {
                   shortname: team.shortName
             }))
       )
+      backToMenu()
 }
 
 async function showCompetitions() {
+
+      console.clear()
+
       const competitions = await getLeagues()
 
       const availableCodes = ['PD', 'PL', 'CL']
@@ -94,6 +105,17 @@ async function showCompetitions() {
                         id: competition.id
                   })
             )
+      )
+      backToMenu()
+}
+
+function backToMenu() {
+      rl.question('Press Enter to return to menu...',
+            () => {
+                  console.clear()
+                  showMenu()
+                  selectOptionMenu()
+            }
       )
 }
 
