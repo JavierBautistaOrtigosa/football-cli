@@ -16,6 +16,7 @@ const rl = readline.createInterface({
 // #endregion
 
 function showMenu() {
+      console.clear()
       console.log('1 - Competitions available')
       console.log('2 - Teams')
       console.log('3 - Upcoming matches')
@@ -23,6 +24,7 @@ function showMenu() {
 }
 
 function showLeagues() {
+      console.clear()
       console.log('1 - La Liga')
       console.log('2 - Premier League')
       console.log('3 - Champions League')
@@ -70,10 +72,9 @@ function selectOptionMenu() {
 }
 
 async function showTeams(competitionCode) {
-      console.log('1')
-      console.clear()
-      console.log('2')
+      console.log('SHOW TEAMS');
       const teams = await getTeams(competitionCode)
+      console.clear()
       console.table(
             teams.map(team => ({
                   name: team.name,
@@ -84,9 +85,6 @@ async function showTeams(competitionCode) {
 }
 
 async function showCompetitions() {
-
-      console.clear()
-
       const competitions = await getLeagues()
 
       const availableCodes = ['PD', 'PL', 'CL']
@@ -94,7 +92,7 @@ async function showCompetitions() {
       const competitionsAvailable = competitions.filter(
             competition => availableCodes.includes(competition.code)
       )
-
+      console.clear()
       console.table(
             competitionsAvailable.map(
                   competition => ({
@@ -112,7 +110,7 @@ async function showCompetitions() {
 function backToMenu() {
       rl.question('Press Enter to return to menu...',
             () => {
-                  console.clear()
+
                   showMenu()
                   selectOptionMenu()
             }
@@ -121,6 +119,7 @@ function backToMenu() {
 
 async function showMatches(competitionCode) {
       const matches = await getMatches(competitionCode)
+      console.clear()
       console.table(
             matches.map((match) => ({
                   time: match.utcDate,
@@ -132,6 +131,7 @@ async function showMatches(competitionCode) {
                   awayTeamScore: match.score.fullTime.away
             }))
       )
+      backToMenu()
 }
 
 module.exports = { showMenu, selectOptionMenu }
