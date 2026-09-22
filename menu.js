@@ -6,7 +6,7 @@
 
 const readline = require('readline')
 const { getLeagues, getTeams, getMatches } = require('./football-api')
-
+const { clearScreen } = require('./utils')
 
 const rl = readline.createInterface({
       input: process.stdin,
@@ -16,7 +16,7 @@ const rl = readline.createInterface({
 // #endregion
 
 function showMenu() {
-      console.clear()
+      clearScreen()
       console.log('1 - Competitions available')
       console.log('2 - Teams')
       console.log('3 - Upcoming matches')
@@ -24,7 +24,7 @@ function showMenu() {
 }
 
 function showLeagues() {
-      console.clear()
+      clearScreen()
       console.log('1 - La Liga')
       console.log('2 - Premier League')
       console.log('3 - Champions League')
@@ -72,9 +72,8 @@ function selectOptionMenu() {
 }
 
 async function showTeams(competitionCode) {
-      console.log('SHOW TEAMS');
       const teams = await getTeams(competitionCode)
-      console.clear()
+      clearScreen()
       console.table(
             teams.map(team => ({
                   name: team.name,
@@ -85,14 +84,13 @@ async function showTeams(competitionCode) {
 }
 
 async function showCompetitions() {
+      clearScreen()
       const competitions = await getLeagues()
-
       const availableCodes = ['PD', 'PL', 'CL']
 
       const competitionsAvailable = competitions.filter(
             competition => availableCodes.includes(competition.code)
       )
-      console.clear()
       console.table(
             competitionsAvailable.map(
                   competition => ({
@@ -109,7 +107,7 @@ async function showCompetitions() {
 
 async function showMatches(competitionCode, matchStatus) {
       const matches = await getMatches(competitionCode, matchStatus)
-      console.clear()
+      clearScreen()
       console.table(
             matches.map((match) => ({
                   time: match.utcDate,
@@ -127,7 +125,6 @@ async function showMatches(competitionCode, matchStatus) {
 function backToMenu() {
       rl.question('Press Enter to return to menu...',
             () => {
-
                   showMenu()
                   selectOptionMenu()
             }

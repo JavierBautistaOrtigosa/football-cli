@@ -48,7 +48,6 @@ async function getTeams(competitionCode) {
 
             if (!response.ok) {
                   throw new Error(`HTTP Error: ${response.status}`)
-
             }
 
             // 3. Convertir a JSON
