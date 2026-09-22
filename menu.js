@@ -55,11 +55,11 @@ function selectOptionMenu() {
                               async (userChoice) => {
                                     let option = Number(userChoice)
                                     if (option === 1) {
-                                          await showMatches('PD')
+                                          await showMatches('PD', 'SCHEDULED')
                                     } else if (option === 2) {
-                                          await showMatches('PL')
+                                          await showMatches('PL', 'SCHEDULED')
                                     } else if (option === 3) {
-                                          await showMatches('CL')
+                                          await showMatches('CL', 'SCHEDULED')
                                     }
                               })
                   } else if (option === 4) {
@@ -107,18 +107,8 @@ async function showCompetitions() {
       backToMenu()
 }
 
-function backToMenu() {
-      rl.question('Press Enter to return to menu...',
-            () => {
-
-                  showMenu()
-                  selectOptionMenu()
-            }
-      )
-}
-
-async function showMatches(competitionCode) {
-      const matches = await getMatches(competitionCode)
+async function showMatches(competitionCode, matchStatus) {
+      const matches = await getMatches(competitionCode, matchStatus)
       console.clear()
       console.table(
             matches.map((match) => ({
@@ -132,6 +122,16 @@ async function showMatches(competitionCode) {
             }))
       )
       backToMenu()
+}
+
+function backToMenu() {
+      rl.question('Press Enter to return to menu...',
+            () => {
+
+                  showMenu()
+                  selectOptionMenu()
+            }
+      )
 }
 
 module.exports = { showMenu, selectOptionMenu }
