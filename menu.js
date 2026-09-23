@@ -34,6 +34,15 @@ function selectOptionMenu() {
       rl.question('Select option: ',
             async (userChoice) => {
                   let option = Number(userChoice)
+
+                  // ⚡ REFACTOR -> VALIDATION
+
+                  if (Number.isNaN(option) || option < 1 || option > 4) {
+                        showMenu()
+                        console.log(`\nInvalid option. Please try again\n`)
+                        return selectOptionMenu()
+                  }
+
                   if (option === 1) {
                         await showCompetitions()
                   } else if (option === 2) {
@@ -41,6 +50,15 @@ function selectOptionMenu() {
                         rl.question('Choose league: ',
                               async (userChoice) => {
                                     let option = Number(userChoice)
+
+                                    // ⚡ REFACTOR -> VALIDATION
+
+                                    if (Number.isNaN(option) || option < 1 || option > 3) {
+                                          console.log(`Invalid option. Please try again\n`)
+                                          return showLeagues()
+                                    }
+
+
                                     if (option === 1) {
                                           await showTeams('PD')
                                     } else if (option === 2) {
