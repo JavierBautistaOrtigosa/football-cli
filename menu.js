@@ -23,11 +23,15 @@ function showMenu() {
       console.log('4 - Exit')
 }
 
-function showLeagues() {
+function showLeagues(errorMessage = '') {
       clearScreen()
       console.log('1 - La Liga')
       console.log('2 - Premier League')
       console.log('3 - Champions League')
+
+      if (errorMessage) {
+            console.log(`\n${errorMessage}\n`)
+      }
 }
 
 function selectOptionMenu() {
@@ -47,39 +51,17 @@ function selectOptionMenu() {
                         await showCompetitions()
                   } else if (option === 2) {
                         showLeagues()
-                        rl.question('Choose league: ',
-                              async (userChoice) => {
-                                    let option = Number(userChoice)
-
-                                    // ⚡ REFACTOR -> VALIDATION
-
-                                    if (Number.isNaN(option) || option < 1 || option > 3) {
-                                          console.log(`Invalid option. Please try again\n`)
-                                          return showLeagues()
-                                    }
+                        selectLeague(async (competitionCode) => {
+                              await showTeams(competitionCode)
+                        })
 
 
-                                    if (option === 1) {
-                                          await showTeams('PD')
-                                    } else if (option === 2) {
-                                          await showTeams('PL')
-                                    } else if (option === 3) {
-                                          await showTeams('CL')
-                                    }
-                              })
+
                   } else if (option === 3) {
-                        showLeagues()
-                        rl.question('Choose league: ',
-                              async (userChoice) => {
-                                    let option = Number(userChoice)
-                                    if (option === 1) {
-                                          await showMatches('PD', 'SCHEDULED')
-                                    } else if (option === 2) {
-                                          await showMatches('PL', 'SCHEDULED')
-                                    } else if (option === 3) {
-                                          await showMatches('CL', 'SCHEDULED')
-                                    }
-                              })
+                        selectLeague(async (competitionCode) => {
+                              await showMatches(competitionCode, 'SCHEDULED')
+                        })
+
                   } else if (option === 4) {
                         console.log('Goodbye :)')
                         rl.close()
@@ -87,6 +69,24 @@ function selectOptionMenu() {
 
             }
       )
+}
+
+function selectLeague(callback) {
+      rl.question('Choose league: ',
+            async (userChoice) => {
+                  const option = Number(userChoice)
+                  if (Number.isNaN(option) || option < 1 || option > 3) {
+                        showLeagues('Invalid option. Please try again.')
+                        return selectLeague(callback)
+                  }
+                  if (option === 1) {
+                        return callback('PD')
+                  } else if (option === 2) {
+                        return callback('PL')
+                  } else if (option === 3) {
+                        return callback('CL')
+                  }
+            })
 }
 
 async function showTeams(competitionCode) {
